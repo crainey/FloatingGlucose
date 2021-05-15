@@ -288,7 +288,7 @@ namespace FloatingGlucose
                     this.notifyIcon1.Text = "BG: " + this.lblGlucoseValue.Text;
                     var status = GlucoseMath.GetGlucoseAlarmStatus((decimal)data.Glucose);
 
-                    this.lblDelta.Text = data.FormattedDelta() + " " + (Default.GlucoseUnits == "mmol" ? "mmol/L" : "mg/dL");
+                    this.lblDelta.Text = data.FormattedDelta();// + " " + (Default.GlucoseUnits == "mmol" ? "mmol/L" : "mg/dL");
 
                     if (Default.EnableRawGlucoseDisplay)
                     {
@@ -301,12 +301,14 @@ namespace FloatingGlucose
                     {
                         case GlucoseAlarmStatusEnum.UrgentHigh:
                         case GlucoseAlarmStatusEnum.UrgentLow:
+                            this.TopMost = true;
                             setLabelsColor(Color.Red);
                             alarmManger.PlayGlucoseAlarm();
                             break;
 
                         case GlucoseAlarmStatusEnum.Low:
                         case GlucoseAlarmStatusEnum.High:
+                            this.TopMost = true;
                             setLabelsColor(Color.Yellow);
                             alarmManger.PlayGlucoseAlarm();
                             break;
@@ -314,6 +316,7 @@ namespace FloatingGlucose
                         case GlucoseAlarmStatusEnum.Unknown:
                         case GlucoseAlarmStatusEnum.Normal:
                         default:
+                            this.TopMost = false;
                             alarmManger.StopAlarm();
                             setLabelsColor(Color.Green);
                             break;
